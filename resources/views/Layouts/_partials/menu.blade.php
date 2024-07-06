@@ -2,13 +2,13 @@
         <nav>
             <ul>
                 <li>
-                    <a href="{{route('index')}}">Home</a>
+                    <a >Home</a>
                 </li>
                 <li>
-                    <a href="{{route('user.create')}}">Create User</a>
+                    <a >Create User</a>
                 </li>
                 <li>
-                    <a href="{{route('user.index')}}">Users</a>
+                    <a >Users</a>
                 </li>
             </ul>
         </nav>
