@@ -12,6 +12,20 @@ class Comment extends Model
      [
     'date_message',
     'message',
-    'id_users'
+    'id_users',
+    'parent_id'
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_users', 'id');
+    }
+    public function replies()
+    {
+        return $this->hasMany(Comment::class, 'parent_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'parent_id');
+    }
 }

@@ -12,14 +12,28 @@ class CommentController extends Controller
     
     public function index(): JsonResponse
     { 
-        return response()->json(Comment::all(), 200);
+        $comments = Comment::with(['replies.user', 'user'])
+            ->whereNull('parent_id')
+            ->get();
+
+        return response()->json($comments);
     }
     public function store(CommentRequest $request): JsonResponse
     {
-        $comment = Comment::create($request->all());
-        return response()->json([
-            'message' => 'Comment created', 
-            'data'=> $comment], 201);
+       
+        $validatedData = $request->validate([
+            'comment' => 'required|string|max:255',
+            'user_id' => 'required|integer|exists:users,id',
+            'parent_id' => 'nullable|integer|exists:comments,id'
+        ]);
+
+        $comment = new Comment();
+        $comment->user_id = $validatedData['user_id'];
+        $comment->comment = $validatedData['comment'];
+        $comment->parent_id = $validatedData['parent_id'] ?? null;
+        $comment.save();
+
+        return response()->json(['message' => 'Comment created successfully'], 201);
     
     }   
     public function show(string $id): JsonResponse
